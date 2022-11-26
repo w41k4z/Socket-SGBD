@@ -1,4 +1,4 @@
-Author : Rakotondranaivo Alain Rico
+Author : Rakotondranaivo Alain Rico (ETU002011)
 
 Syntax check based on white space splitter
 
