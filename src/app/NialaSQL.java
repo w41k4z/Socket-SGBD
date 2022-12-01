@@ -1,22 +1,35 @@
 package app;
 
 import java.io.File;
+
 import java.util.ArrayList;
-import java.util.Scanner;
+
+import java.io.PrintWriter;
+import java.io.BufferedReader;
 
 import databaseObjects.Database;
+
 import exceptions.NoDatabaseSelectedException;
+
 import fileTreatments.ReadFile;
+
 import interfaces.SyntaxCheck;
+
 import requests.DataDefinitionSyntaxCheck;
 import requests.DataManipulationSyntaxCheck;
 import requests.DataQuerySyntaxCheck;
 
 public class NialaSQL {
 
+  private boolean isConnected;
+
   // DDS : Data Definition Syntax (CREATE/DROP/USE ... ...)
   // DMS : Data Manipulation Syntax (ADD/DELETE/UPDATE ... ......)
   // DQL : Data Query Syntax (GET/SHOW ... ... [...])
+
+  public void connect() {
+    this.isConnected = true;
+  }
 
   private Database[] database = new Database[1];
 
@@ -28,75 +41,81 @@ public class NialaSQL {
     return database[0];
   }
 
-  public void getBanner() {
-    System.out.print("\n\n");
-    System.out.println(" ==================================");
-    System.out.println(" ||                              ||");
-    System.out.println(" || NialaSQL, the best SGBD ever ||");
-    System.out.println(" ||                              ||");
-    System.out.println(" ||         @Home made           ||");
-    System.out.println(" ||                              ||");
-    System.out.println(" ==================================");
-    System.out.print("\n\n");
+  public void getBanner(PrintWriter out) throws Exception {
+    out.print("\n\n");
+    out.println(" ==================================");
+    out.println(" ||                              ||");
+    out.println(" || NialaSQL, the best SGBD ever ||");
+    out.println(" ||                              ||");
+    out.println(" ||         @Home made           ||");
+    out.println(" ||                              ||");
+    out.println(" ==================================");
+    out.print("\n\n\n");
+    out.flush();
   }
 
-  public void nialaSQLprompt() {
-    System.out.print("NialaSQL> ");
-  }
-
-  public void nialaOutput(String out) {
-    if (out != null) {
-      System.out.println(out + "\n");
+  public void nialaOutput(PrintWriter out, String output) throws Exception {
+    if (output != null) {
+      out.println(output + "\n");
+      out.flush();
     }
   }
 
   // the app
-  public void run(boolean reinitialize) {
-    if (!reinitialize) this.getBanner();
-    this.connectionToDatabase();
-    this.runConsole();
-  }
-
-  public void end() {
-    System.exit(0);
+  public void run(BufferedReader in, PrintWriter out, boolean reinitialize) throws Exception {
+    if (this.isConnected) {
+      if (!reinitialize) this.getBanner(out);
+      this.connectionToDatabase(in , out);
+      this.runConsole(in, out);
+    }
   }
 
   // DDRequest required when starting the app
-  public void connectionToDatabase() {
-    Scanner prompt = new Scanner(System.in);
-    this.nialaSQLprompt();
-    String request = prompt.nextLine();
+  public void connectionToDatabase(BufferedReader in, PrintWriter out) throws Exception {
+    if (this.isConnected) {
+      // reading the client input
+      String request = in.readLine();
+      
+      switch (request.toUpperCase()) {
+        case "EXIT":
+          this.isConnected = false;
+          return;
+        default:
+          this.executeNialaRequest(in, out, request, 0);
+          break;
+      }
+  
+      if (this.getDatabase() != null) {
+        return;
+      }
+      this.connectionToDatabase(in, out);
 
-    switch (request.toUpperCase()) {
-      case "EXIT":
-        this.end();
-      default:
-        this.executeNialaRequest(request, 0);
-        break;
     }
-
-    if (this.getDatabase() != null) {
-      return;
-    }
-    this.connectionToDatabase();
   }
 
-  public void runConsole() {
-    if (this.getDatabase() == null) this.run(true); // in case the user drop the current database
-    Scanner prompt = new Scanner(System.in);
-    this.nialaSQLprompt();
-    String request = prompt.nextLine();
-    switch (request.toUpperCase()) {
-      case "EXIT":
-        this.end();
-      default:
-        this.executeNialaRequest(request, 1);
-        break;
+  public void runConsole(BufferedReader in, PrintWriter out) throws Exception {
+    if (this.isConnected) {
+      
+      if (this.getDatabase() == null)
+        this.run(in, out, true); // in case the user drop the current database
+  
+      // reading the client input
+      String request = in.readLine();
+
+      switch (request.toUpperCase()) {
+        case "EXIT":
+          this.isConnected = false;
+          return;
+        default:
+          this.executeNialaRequest(in, out, request, 1);
+          break;
+      }
+      this.runConsole(in, out);
+
     }
-    this.runConsole();
   }
 
-  public void executeNialaRequest(String request, int phase) {
+  public void executeNialaRequest(BufferedReader in, PrintWriter out, String request, int phase) throws Exception {
     SyntaxCheck syntaxCheck = null;
     if (DataDefinitionSyntaxCheck.isDDS(request)) {
       syntaxCheck = new DataDefinitionSyntaxCheck();
@@ -105,15 +124,13 @@ public class NialaSQL {
     } else if (DataManipulationSyntaxCheck.isDMS(request)) {
       syntaxCheck = new DataManipulationSyntaxCheck();
     } else {
-      this.nialaOutput("ERROR: Undefined query");
+      this.nialaOutput(out, "ERROR: Undefined query");
       switch (phase) {
         case 0:
-          this.connectionToDatabase();
+          this.connectionToDatabase(in, out);
           return;
         case 1:
-          this.runConsole();
-          return;
-        default:
+          this.runConsole(in, out);
           return;
       }
     }
@@ -123,7 +140,7 @@ public class NialaSQL {
       request,
       this.getDatabaseAddress()
     );
-    this.nialaOutput(result);
+    this.nialaOutput(out, result);
   }
 
   public static String showAllDatabases() throws Exception {
@@ -151,10 +168,5 @@ public class NialaSQL {
       result += "   " + (i + 1) + ") " + relations.get(i) + "\n";
     }
     return result;
-  }
-
-  public static void main(String[] args) throws Exception {
-    NialaSQL nialaSQL = new NialaSQL();
-    nialaSQL.run(false);
   }
 }

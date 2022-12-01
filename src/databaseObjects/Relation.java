@@ -13,7 +13,7 @@ public class Relation extends DatabaseObject {
 
   Database database;
   String[] columns;
-  ArrayList<String[]> data; // by line
+  ArrayList<String[]> data = new ArrayList<>(); // by line
 
   public Relation() {}
 
