@@ -88,8 +88,7 @@ public class DataManipulationSyntaxCheck implements SyntaxCheck {
       }
     } catch (Exception exception) {
       result = exception.getMessage();
-    } finally {
-      return result;
     }
+    return result;
   }
 }

@@ -5,11 +5,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
 import app.NialaSQL;
 import sockets.threads.ServiceThread;
 
@@ -31,11 +26,9 @@ public class Server {
             this.listener = new ServerSocket(6969);
             while (true) {
                 Socket socketOfServer = listener.accept(); // the client
-                BufferedReader in = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
-                PrintWriter out = new PrintWriter(socketOfServer.getOutputStream());
                 new ServiceThread(new NialaSQL(), socketOfServer).start();
                 System.out.println("New connection with client# " + this.clientNumber + " at " + socketOfServer);
-                    //this.incrementClient();
+                this.incrementClient();
                 if (this.clientNumber == -1) break;
             }
             this.listener.close();

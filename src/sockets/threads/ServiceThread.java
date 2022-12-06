@@ -7,7 +7,6 @@ import java.net.Socket;
 import app.NialaSQL;
 
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 public class ServiceThread extends Thread {
     
@@ -34,6 +33,8 @@ public class ServiceThread extends Thread {
             out.println("BYE !");
             out.flush();
             this.socketOfServer.close();
+            in.close();
+            out.close();
 
         } catch (Exception e) {
             System.out.println(e);

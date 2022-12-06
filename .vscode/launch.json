@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch Server",
+            "request": "launch",
+            "mainClass": "sockets.Server",
+            "projectName": "Socket-SGBD_9a1a378"
+        },
+        {
             "name": "Java",
             "type": "java",
             "request": "launch",

@@ -1,8 +1,6 @@
 package sockets.threads;
 
 import java.io.PrintWriter;
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class RequestsThread implements Runnable {
@@ -16,15 +14,18 @@ public class RequestsThread implements Runnable {
 
     @Override
     public void run() {
+        Scanner scanner = new Scanner(System.in);
         while (true) {
-            Scanner scanner = new Scanner(System.in);
             System.out.print("NialaSQL> ");
             String request = scanner.nextLine();
             this.out.println(request);
             this.out.flush();
-            if (request.equalsIgnoreCase("EXIT"))
+            if (request.equalsIgnoreCase("EXIT")) {
+                this.out.close();
+                scanner.close();
                 return;
-            try{ Thread.sleep(30); } catch (Exception e) { System.out.println(e); }
+            }
+            try{ Thread.sleep(100); } catch (Exception e) { System.out.println(e); }
         }
     }
 }
