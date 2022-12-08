@@ -145,7 +145,7 @@ public class NialaSQL {
 
   public static String showAllDatabases() throws Exception {
     ArrayList<String> databases = new ReadFile(
-      new File("NialaSQLDatabases/Databases.db")
+      new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/Databases.db")
     )
       .readFile(true);
     if (databases.size() == 0) return "0 DATABASE detected";
@@ -159,7 +159,7 @@ public class NialaSQL {
   public static String showAllRelations(Database database) throws Exception {
     if (database == null) throw new NoDatabaseSelectedException();
     ArrayList<String> relations = new ReadFile(
-      new File("NialaSQLDatabases/" + database.getName() + "/Relations.rl")
+      new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" + database.getName() + "/Relations.rl")
     )
       .readFile(true);
     if (relations.size() == 0) return "0 RELATION detected";

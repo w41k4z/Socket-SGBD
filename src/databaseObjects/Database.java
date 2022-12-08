@@ -45,14 +45,14 @@ public class Database extends DatabaseObject {
   }
 
   public void createDatabase() throws Exception {
-    File databaseStorage = new File("NialaSQLDatabases/Databases.db");
+    File databaseStorage = new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/Databases.db");
 
     this.checkDuplicates(databaseStorage);
 
     WriteFile writer = new WriteFile(databaseStorage);
     writer.writeFile(new String[] { this.getName() });
 
-    File allDb = new File("NialaSQLDatabases/");
+    File allDb = new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/");
     File databaseDirectory = ExecuteFile.createNewFile(
       allDb,
       this.getName(),
@@ -63,31 +63,31 @@ public class Database extends DatabaseObject {
   }
 
   public void dropDatabase() throws Exception {
-    this.checkExistence(new File("NialaSQLDatabases/Databases.db"));
+    this.checkExistence(new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/Databases.db"));
 
-    ReadFile reader = new ReadFile(new File("NialaSQLDatabases/Databases.db"));
+    ReadFile reader = new ReadFile(new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/Databases.db"));
     ArrayList<String> databases = reader.readFile(true);
 
     // deleting the directory
-    ExecuteFile.deleteFile(new File("NialaSQLDatabases/" + this.getName()));
+    ExecuteFile.deleteFile(new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" + this.getName()));
 
     // deleting the database from the file
-    ExecuteFile.clearFile(new File("NialaSQLDatabases/Databases.db"));
+    ExecuteFile.clearFile(new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/Databases.db"));
     databases.remove(this.getName());
 
     // the method clear file really clear the file so here, it re-writes the rest
-    new WriteFile(new File("NialaSQLDatabases/Databases.db"))
+    new WriteFile(new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/Databases.db"))
       .writeFile(databases.toArray());
   }
 
   public void useDatabase(Database[] toPassValue) throws Exception {
-    this.checkExistence(new File("NialaSQLDatabases/Databases.db"));
+    this.checkExistence(new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/Databases.db"));
     this.fetchRelation();
     toPassValue[0] = this;
   }
 
   public void fetchRelation() throws Exception {
-    ArrayList<String> relationList = new ReadFile(new File("NialaSQLDatabases/" + this.getName() + "/Relations.rl")).readFile(true);
+    ArrayList<String> relationList = new ReadFile(new File("/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" + this.getName() + "/Relations.rl")).readFile(true);
     for(int i = 0; i < relationList.size(); i++) {
       this.appendRelation(new Relation(this, relationList.get(i), null));
     }

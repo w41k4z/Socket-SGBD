@@ -99,7 +99,7 @@ public class Relation extends DatabaseObject {
 
   public String[] getDefaultColumns() throws Exception {
     File relationAbout = new File(
-      "NialaSQLDatabases/" +
+      "/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" +
       this.getDatabase().getName() +
       "/Relations/" +
       this.getDatabase().getName() +
@@ -141,6 +141,7 @@ public class Relation extends DatabaseObject {
       // the value Y
       String[] value = new String[specification.length];
 
+      // extracting columns, values and operators
       for (int i = 0; i < specification.length; i++) {
         if(operator != null && i < operator.length) {
           operator[i] = conditions[i % 2 == 0 ? i + 1 : i];
@@ -222,7 +223,7 @@ public class Relation extends DatabaseObject {
 
   public void fetchData() throws Exception {
     File relationAbout = new File(
-      "NialaSQLDatabases/" +
+      "/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" +
       this.getDatabase().getName() +
       "/Relations/" +
       this.getDatabase().getName() +
@@ -270,12 +271,12 @@ public class Relation extends DatabaseObject {
     this.checkDatabase();
 
     File relationStorage = new File(
-      "NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations.rl"
+      "/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations.rl"
     );
     this.checkDuplicates(relationStorage);
 
     File relationDirectory = new File(
-      "NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations"
+      "/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations"
     );
     new WriteFile(relationStorage).writeFile(new String[] { this.getName() });
 
@@ -295,7 +296,7 @@ public class Relation extends DatabaseObject {
 
     // making a backup
     File relationStorage = new File(
-      "NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations.rl"
+      "/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations.rl"
     );
     ReadFile reader = new ReadFile(relationStorage);
     ArrayList<String> relations = reader.readFile(true);
@@ -305,7 +306,7 @@ public class Relation extends DatabaseObject {
     relations.remove(this.getName());
     ExecuteFile.deleteFile(
       new File(
-        "NialaSQLDatabases/" +
+        "/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" +
         this.getDatabase().getName() +
         "/Relations/" +
         this.getDatabase().getName() +
@@ -347,7 +348,7 @@ public class Relation extends DatabaseObject {
     }
 
     File relationDirectory = new File(
-      "NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations"
+      "/home/alain/Projects/JavaProject/Socket-SGBD/NialaSQLDatabases/" + this.getDatabase().getName() + "/Relations"
     );
 
     File currentRelationFile = ExecuteFile.createNewFile(
@@ -438,7 +439,7 @@ public class Relation extends DatabaseObject {
   public String promptShow(String toShow) {
     String result = "";
     int j = 0;
-    for(int i = 0; i < 20; i++) {
+    for(int i = 0; i < 17; i++) {
       if(j < toShow.length()) {
         result = result.concat("" + toShow.charAt(j)); 
       } else {
