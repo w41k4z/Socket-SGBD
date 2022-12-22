@@ -11,15 +11,12 @@ import sockets.threads.ServiceThread;
 public class Server {
 
     private ServerSocket listener;
-    private int clientNumber = 0;
+    private boolean disconnect;
 
     public Server() {}
 
-    private void incrementClient() {
-        this.clientNumber += 1;
-    }
-
     private void startServer() {
+        this.disconnect = false;
         System.out.println("Server is waiting ...");
         
         try {
@@ -27,9 +24,8 @@ public class Server {
             while (true) {
                 Socket socketOfServer = listener.accept(); // the client
                 new ServiceThread(new NialaSQL(), socketOfServer).start();
-                System.out.println("New connection with client# " + this.clientNumber + " at " + socketOfServer);
-                this.incrementClient();
-                if (this.clientNumber == -1) break;
+                System.out.println("New connection with client: " + socketOfServer);
+                if (this.disconnect) break;
             }
             this.listener.close();
         } catch (Exception e) {

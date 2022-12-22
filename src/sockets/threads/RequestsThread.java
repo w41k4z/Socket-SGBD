@@ -18,9 +18,7 @@ public class RequestsThread implements Runnable {
         while (true) {
             try {
                 Thread.sleep(100);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+            } catch (Exception e) {}
             System.out.print("NialaSQL> ");
             String request = scanner.nextLine();
             this.out.println(request);

@@ -43,13 +43,12 @@ public class NialaSQL {
 
   public void getBanner(PrintWriter out) throws Exception {
     out.print("\n\n");
-    out.println(" ==================================");
-    out.println(" ||                              ||");
-    out.println(" || NialaSQL, the best SGBD ever ||");
-    out.println(" ||                              ||");
-    out.println(" ||         @Home made           ||");
-    out.println(" ||                              ||");
-    out.println(" ==================================");
+    out.println(" ======================================");
+    out.println(" ||                                  ||");
+    out.println(" || NialaSQL: Release 1.0 Production ||");
+    out.println(" ||   on Thu Dec 01 09:35:42 2022    ||");
+    out.println(" ||                                  ||");
+    out.println(" ======================================");
     out.print("\n\n\n");
     out.flush();
   }

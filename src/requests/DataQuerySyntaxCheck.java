@@ -12,6 +12,7 @@ import exceptions.InvalidRequestSyntaxException;
 import exceptions.InvalidTargetException;
 import exceptions.MissingSemicolonException;
 import exceptions.NoDatabaseSelectedException;
+import exceptions.NoSuchObjectException;
 import interfaces.SyntaxCheck;
 import utilities.RelationOperation;
 
@@ -181,7 +182,12 @@ public class DataQuerySyntaxCheck implements SyntaxCheck {
 
     // getting the default relation from the database
     // possible NoSuchObjectException here
-    Relation defaultRelation = database.getRelationByName(reqs[3]);
+    Relation defaultRelation = null;
+    try {
+      defaultRelation = database.getRelationByName(reqs[3]);
+    } catch (NoSuchObjectException e) {
+      defaultRelation = getRelationByRequest(request.substring(request.indexOf("["), request.indexOf("]")), database);
+    }
     return RelationOperation.Selection(defaultRelation, column == null ? defaultRelation.getColumns() : column, spec);
   }
 }
