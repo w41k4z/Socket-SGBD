@@ -1,7 +1,7 @@
 ## Syntax Check Documentation
 
 ### Author
-**Rakotondranaivo Alain Rico (ETU002011)**
+**Rakotondranaivo Alain Rico**
 
 ## Overview
 This document provides a syntax guide for operations based on a **whitespace splitter**. The syntax is divided into three categories:
